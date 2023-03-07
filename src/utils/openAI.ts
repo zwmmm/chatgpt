@@ -9,7 +9,7 @@ export const generatePayload = (apiKey: string, messages: ChatMessage[]): Reques
   method: 'POST',
   body: JSON.stringify({
     model: 'gpt-3.5-turbo',
-    messages,
+    messages: `${messages}；如果你不知道，可以回答不知道`,
     temperature: 0.6,
     stream: true,
   }),
