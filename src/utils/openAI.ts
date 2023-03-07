@@ -1,19 +1,32 @@
 import { createParser, ParsedEvent, ReconnectInterval } from 'eventsource-parser'
 import type { ChatMessage } from '@/types'
 
-export const generatePayload = (apiKey: string, messages: ChatMessage[]): RequestInit => ({
-  headers: {
-    'Content-Type': 'application/json',
-    Authorization: `Bearer ${apiKey}`,
-  },
-  method: 'POST',
-  body: JSON.stringify({
-    model: 'gpt-3.5-turbo',
-    messages,
-    temperature: 0.6,
-    stream: true,
-  }),
-})
+const noIdea = '；如果你不知道，可以回答不知道'
+
+export const generatePayload = (apiKey: string, messages: ChatMessage[]): RequestInit => {
+  const newMessages = messages.map(item => {
+    if (item.role === 'user' && !item.content.endsWith(noIdea)) {
+      return {
+        ...item,
+        content: `${item.content}${noIdea}`
+      }
+    }
+    return item
+  })
+  return {
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${apiKey}`,
+    },
+    method: 'POST',
+    body: JSON.stringify({
+      model: 'gpt-3.5-turbo',
+      messages: newMessages,
+      temperature: 0.6,
+      stream: true,
+    }),
+  }
+}
 
 export const parseOpenAIStream = (rawResponse: Response) => {
   const encoder = new TextEncoder()
