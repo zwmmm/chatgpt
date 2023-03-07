@@ -27,7 +27,7 @@ export default () => {
       ...messageList(),
       {
         role: 'user',
-        content: inputValue,
+        content: `${inputValue} 如果你不知道，可以回答不知道`,
       },
     ])
     requestWithLatestMessage()
