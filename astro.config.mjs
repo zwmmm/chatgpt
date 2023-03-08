@@ -10,7 +10,7 @@ import node from '@astrojs/node'
 import vercel from '@astrojs/vercel/edge'
 
 const envAdapter = () => {
-  if (process.env.OUTPUT == 'vercel') {
+  if (process.env.OUTPUT === 'vercel') {
     return vercel()
   } else {
     return node({
